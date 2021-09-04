@@ -1,0 +1,55 @@
+:root {
+    --primary1: #1B262C;
+    --primary2: #0F4C75;
+    --primary3: #3282B8;
+    --primary4: #BBE1FA;
+}
+
+[theme="g10"] input, [theme="g10"] textarea {
+    color: #1B262C;
+}
+
+* {
+    transition: all 200ms ease;
+}
+
+.out input {
+    text-align: end;
+}
+
+button.bx--tooltip__trigger.bx--tooltip__trigger--definition {
+    border-bottom: none;
+}
+
+button.bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom:focus {
+    outline: none;
+}
+
+@media (max-width: 600px) {
+    button.bx--btn {
+        padding: calc(0.875rem - 3px) 43px calc(0.875rem - 3px) 10px;
+       }
+}
+
+
+
+/* GRID */
+.n7 { grid-area: n7; }
+.n8 { grid-area: n8; }
+.n9 { grid-area: n9; }
+.n4 { grid-area: n4; }
+.n5 { grid-area: n5; }
+.n6 { grid-area: n6; }
+.n1 { grid-area: n1; }
+.n2 { grid-area: n2; }
+.n3 { grid-area: n3; }
+.ndot { grid-area: ndot; }
+.out { grid-area: out; }
+.division { grid-area: division; }
+.mult { grid-area: mult; }
+.minus { grid-area: minus; }
+.plus { grid-area: plus; }
+.n0 { grid-area: n0; }
+.ac { grid-area: ac; }
+.pow { grid-area: pow; }
+.equal { grid-area: equal; }
