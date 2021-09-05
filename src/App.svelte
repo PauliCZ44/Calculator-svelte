@@ -12,13 +12,13 @@ import Header from "./Header.svelte";
 
 onMount(() => {
     document.getElementById("app").focus();
+    document.getElementById("app").classList.remove("loading")
 });
 
 let operation
 let history = []
 let historyString = ""
 let calcEl
-let operationEl
 let operands = ["/","x","-","+","*","^",]
 let input = 0;
 let lastRes
@@ -152,7 +152,7 @@ let onKeyPress = (e) => {
 
 </script>
 
-<main on:keydown={onKeyPress} tabindex="-1" id="app">
+<main on:keydown={onKeyPress} tabindex="-1" id="app" class="loading">
 	<Header/>
 		<div class="content">
 			<section class="calculator" on:click={buttonClick} bind:this={calcEl}>
@@ -186,6 +186,7 @@ let onKeyPress = (e) => {
 
 <style lang="scss">
 main {
+    isolation: isolate;
     display: grid;
     grid-template-columns: 1fr min(65ch, 100%) 1fr;
 	grid-template-rows: max-content auto 1fr;
@@ -199,6 +200,19 @@ main {
         width: 100%;
         grid-column: 1 / 4;
     }
+}
+
+.loading:before {
+    padding-top: 2.5rem;
+    text-align: center;
+    content: 'Loading...';
+    margin:auto;
+    text-shadow: 0 0 white;
+    font-size: 5rem;
+    z-index: 3;
+    position: fixed;
+    inset: 0;
+    background: rgba(0 0 0 / 0.5)
 }
 
 .calculator {

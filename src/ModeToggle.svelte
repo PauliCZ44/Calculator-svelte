@@ -32,7 +32,7 @@
     height: var(--toggleHeight);
     width: var(--toggleWidth);
     border-radius: var(--toggleHeight);
-    transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out, position 0ms ease;
     background: var(--bgColor--night);
   }
   .day {
