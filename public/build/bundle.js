@@ -9658,20 +9658,68 @@ var app = (function () {
     function create_fragment$3(ctx) {
     	let footer;
     	let div;
-    	let p;
+    	let p0;
+    	let t0;
+    	let a0;
+    	let t2;
+    	let p1;
+    	let t3;
+    	let a1;
+    	let t5;
+    	let p2;
+    	let t6;
+    	let span0;
+    	let a2;
+    	let t8;
+    	let span1;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
     			footer = element("footer");
     			div = element("div");
-    			p = element("p");
-    			p.textContent = "Credits for dark mode toggle button: https://codepen.io/RefractedColor/pen/mdWZRPQ";
-    			attr_dev(p, "class", "svelte-1l0ph3m");
-    			add_location(p, file$3, 2, 8, 74);
-    			attr_dev(div, "class", "footerContent p-3");
-    			add_location(div, file$3, 1, 4, 33);
-    			attr_dev(footer, "class", "full-bleed svelte-1l0ph3m");
-    			add_location(footer, file$3, 0, 0, 0);
+    			p0 = element("p");
+    			t0 = text("This app is made with ");
+    			a0 = element("a");
+    			a0.textContent = "SVELTE.";
+    			t2 = space();
+    			p1 = element("p");
+    			t3 = text("Theme:\r\n      ");
+    			a1 = element("a");
+    			a1.textContent = "Carbon Components Svelte";
+    			t5 = space();
+    			p2 = element("p");
+    			t6 = text("Made by Pavel Stastny.\r\n      ");
+    			span0 = element("span");
+    			a2 = element("a");
+    			a2.textContent = "My github.";
+    			t8 = space();
+    			span1 = element("span");
+    			span1.textContent = "Show FCC test cases.";
+    			attr_dev(a0, "class", "svelte-link svelte-1c5phmk");
+    			attr_dev(a0, "href", "https://svelte.dev/");
+    			add_location(a0, file$3, 11, 28, 317);
+    			attr_dev(p0, "class", "svelte-1c5phmk");
+    			add_location(p0, file$3, 10, 4, 284);
+    			attr_dev(a1, "href", "https://carbon-svelte.vercel.app/");
+    			attr_dev(a1, "class", "svelte-1c5phmk");
+    			add_location(a1, file$3, 17, 6, 437);
+    			attr_dev(p1, "class", "svelte-1c5phmk");
+    			add_location(p1, file$3, 15, 4, 412);
+    			attr_dev(a2, "href", "https://github.com/PauliCZ44/");
+    			attr_dev(a2, "class", "svelte-1c5phmk");
+    			add_location(a2, file$3, 23, 8, 771);
+    			attr_dev(span0, "class", "d-inline-block");
+    			add_location(span0, file$3, 22, 6, 732);
+    			attr_dev(span1, "class", "show-test svelte-1c5phmk");
+    			add_location(span1, file$3, 25, 6, 849);
+    			attr_dev(p2, "class", "d-flex justify-content-between flex-wrap svelte-1c5phmk");
+    			add_location(p2, file$3, 20, 4, 642);
+    			attr_dev(div, "class", "footerContent py-3");
+    			add_location(div, file$3, 9, 2, 246);
+    			attr_dev(footer, "class", "svelte-1c5phmk");
+    			add_location(footer, file$3, 8, 0, 234);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -9679,13 +9727,33 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, footer, anchor);
     			append_dev(footer, div);
-    			append_dev(div, p);
+    			append_dev(div, p0);
+    			append_dev(p0, t0);
+    			append_dev(p0, a0);
+    			append_dev(div, t2);
+    			append_dev(div, p1);
+    			append_dev(p1, t3);
+    			append_dev(p1, a1);
+    			append_dev(div, t5);
+    			append_dev(div, p2);
+    			append_dev(p2, t6);
+    			append_dev(p2, span0);
+    			append_dev(span0, a2);
+    			append_dev(p2, t8);
+    			append_dev(p2, span1);
+
+    			if (!mounted) {
+    				dispose = listen_dev(span1, "click", /*showTests*/ ctx[0], { once: true }, false, false);
+    				mounted = true;
+    			}
     		},
     		p: noop,
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(footer);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -9700,16 +9768,33 @@ var app = (function () {
     	return block;
     }
 
-    function instance$3($$self, $$props) {
+    function instance$3($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Footer', slots, []);
+
+    	let showTests = async () => {
+    		const script = document.createElement('script');
+    		script.src = 'https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js';
+    		document.head.append(script);
+    	};
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Footer> was created with unknown prop '${key}'`);
     	});
 
-    	return [];
+    	$$self.$capture_state = () => ({ showTests });
+
+    	$$self.$inject_state = $$props => {
+    		if ('showTests' in $$props) $$invalidate(0, showTests = $$props.showTests);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [showTests];
     }
 
     class Footer extends SvelteComponentDev {
@@ -10910,15 +10995,15 @@ var app = (function () {
     			t21 = space();
     			create_component(footer.$$.fragment);
     			attr_dev(div0, "class", "out");
-    			add_location(div0, file, 158, 4, 4026);
+    			add_location(div0, file, 158, 4, 4184);
     			attr_dev(section, "class", "calculator svelte-606o2x");
-    			add_location(section, file, 157, 3, 3951);
+    			add_location(section, file, 157, 3, 4108);
     			attr_dev(div1, "class", "content");
-    			add_location(div1, file, 156, 2, 3926);
+    			add_location(div1, file, 156, 2, 4082);
     			attr_dev(main, "tabindex", "-1");
     			attr_dev(main, "id", "app");
     			attr_dev(main, "class", "svelte-606o2x");
-    			add_location(main, file, 154, 0, 3859);
+    			add_location(main, file, 154, 0, 4013);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
