@@ -12,7 +12,10 @@ import Header from "./Header.svelte";
 
 onMount(() => {
     document.getElementById("app").focus();
-    document.getElementById("app").classList.remove("loading")
+    setTimeout(() => {
+        document.getElementById("app").classList.remove("loading")
+    }, 100)
+
 });
 
 let operation
@@ -60,9 +63,6 @@ let handleAddOperand = (operand) => {
     if (operation.includes('=')) {
         operation = lastRes + operand;
     }
-    // console.log({operandIsLast})
-    // input = operandIsLast ? input.slice(0,-1) + operand : operand;
-    /* Check if in operation last char is operand. If true then replace operand. If false add operand */
     let isOperandLast = operands.includes(operation.slice(-1))
     operation = isOperandLast ? operation.slice(0,-1) + operand : operation+operand;
     input = operand
@@ -212,7 +212,7 @@ main {
     z-index: 3;
     position: fixed;
     inset: 0;
-    background: rgba(0 0 0 / 0.5)
+    background: rgba(0 0 0 / 0.95)
 }
 
 .calculator {
