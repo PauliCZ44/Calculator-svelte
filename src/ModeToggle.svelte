@@ -1,16 +1,26 @@
 <script>
+  import { onMount } from "svelte";
   export let darkMode = true;
+  let wrapper
+
+  onMount(() => {
+    setTimeout(() => {
+      console.log(wrapper);
+      wrapper.classList.add("loaded")
+    }, 500)
+});
+
 </script>
 
-<main>
-  <div class="tdnn" class:day="{!darkMode}" on:click>
+<main > 
+  <div class="tdnn" class:day="{!darkMode}" on:click  bind:this={wrapper}>
     <div class="moon" class:sun="{!darkMode}" />
   </div>
+  <div class="loaded"></div>
 </main>
 
 <style>
   main {
-
     --toggleHeight: 16em;
     --toggleWidth: 30em;
     --toggleBtnRadius: 10em;
@@ -21,8 +31,8 @@
     --bgColor--day: #9ee3fb;
     --toggleBtn-bgColor--day: var(--bgColor--day);
   }
-
   .tdnn {
+    opacity: 0;
     cursor: pointer;
     margin: 0 auto;
     /*change size of toggle with font-size*/
@@ -34,6 +44,9 @@
     border-radius: var(--toggleHeight);
     transition: all 500ms ease-in-out, height 0ms ease, width 0ms ease;
     background: var(--bgColor--night);
+  }
+  .loaded {
+    opacity: 1;
   }
   .day {
     background: #ffbf71;

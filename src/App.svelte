@@ -59,6 +59,24 @@ let removeLastChar = () => {
     input = `${input}`.slice(0, -1)
 }
 
+let handleNumberInput = (e, keyEvent = false) => {
+    let num = keyEvent ? e : e.target.innerText
+    console.log(e);
+    if (typeof e === "number") {
+        console.log("is num");
+    }
+    if (operation.includes('=')) {
+        input = num
+        operation = num
+    } else if (operands.includes(input[0])) {
+        input = num
+        operation += num
+    } else {
+        input += num
+        operation += num
+    }
+}
+
 let handleAddOperand = (operand) => {
     if (operation.includes('=')) {
         operation = lastRes + operand;
@@ -114,17 +132,7 @@ let buttonClick = (e) => {
                 break;
             default:
                 handleFirstInput()
-                if (operation.includes('=')) {
-                    input = e.target.innerText
-                    operation = e.target.innerText
-                    break;
-                } else if (operands.includes(input[0])) {
-                    input = e.target.innerText
-                    operation += e.target.innerText
-                } else {
-                    input += e.target.innerText
-                    operation += e.target.innerText
-                }
+                handleNumberInput(e)
                 break;
         }
         
@@ -136,11 +144,11 @@ let onKeyPress = (e) => {
 	console.log("key event:", e);
     if (parseInt(e.key) >= 0) {
         handleFirstInput()
-        console.log("number", e.key);
-        input += e.key;
+        handleNumberInput(e.key, true)
     } else if (operands.includes(e.key)) {
 		handleAddOperand(e.key)
 	} else if (e.key === "Enter") {
+        e.preventDefault()
         input = evaluate()
 	} else if (e.key === "," || e.key === ".") {
         handleDot()
@@ -153,69 +161,88 @@ let onKeyPress = (e) => {
 </script>
 
 <main on:keydown={onKeyPress} tabindex="-1" id="app" class="loading">
-	<Header/>
-		<div class="content">
-			<section class="calculator" on:click={buttonClick} bind:this={calcEl}>
-				<div class="out">
-					<TextInput bind:value={operation} id="operation" readonly light  size="sm" />
-					<TextInput bind:value={input}  id="display" readonly   size="xl" />
-				</div>
-				<Button class="control ac" id="clear">AC</Button>
-				<Button class="control pow">^</Button>
-				<Button class="control division" id="divide">/</Button>
-				<Button class="control mult" id="multiply">*</Button>
-				<Button class="number n7" id="seven">7</Button>
-				<Button class="number n8" id="eight">8</Button>
-				<Button class="number n9" id="nine">9</Button>
-				<Button class="control minus" id="subtract">-</Button>
-				<Button class="number n4" id="four">6</Button>
-				<Button class="number n5" id="five">5</Button>
-				<Button class="number n6" id="six">4</Button>
-				<Button class="control plus" id="add">+</Button>
-				<Button class="number n1" id="one">1</Button>
-				<Button class="number n2" id="two">2</Button>
-				<Button class="number n3" id="three">3</Button>
-				<Button class="number n0" id="zero">0</Button>
-				<Button class="control ndot" id="decimal">.</Button>
-				<Button class="control equal" id="equals">=</Button>
-			</section>
-			<TextArea labelText="History of results" disabled class="cursor-text" bind:value={historyString}/>
-		</div>
-	<Footer/>
+  <Header />
+  <div class="content">
+    <section class="calculator" on:click={buttonClick} bind:this={calcEl}>
+      <div class="out">
+        <TextInput
+          bind:value={operation}
+          id="operation"
+          readonly
+          light
+          size="sm"
+        />
+        <TextInput bind:value={input} id="display" readonly size="xl" />
+      </div>
+      <Button class="control ac" id="clear">AC</Button>
+      <Button class="control pow">^</Button>
+      <Button class="control division" id="divide">/</Button>
+      <Button class="control mult" id="multiply">*</Button>
+      <Button class="number n7" id="seven">7</Button>
+      <Button class="number n8" id="eight">8</Button>
+      <Button class="number n9" id="nine">9</Button>
+      <Button class="control minus" id="subtract">-</Button>
+      <Button class="number n4" id="four">6</Button>
+      <Button class="number n5" id="five">5</Button>
+      <Button class="number n6" id="six">4</Button>
+      <Button class="control plus" id="add">+</Button>
+      <Button class="number n1" id="one">1</Button>
+      <Button class="number n2" id="two">2</Button>
+      <Button class="number n3" id="three">3</Button>
+      <Button class="number n0" id="zero">0</Button>
+      <Button class="control ndot" id="decimal">.</Button>
+      <Button class="control equal" id="equals">=</Button>
+    </section>
+    <TextArea
+      labelText="History of results"
+      disabled
+      class="cursor-text"
+      bind:value={historyString}
+    />
+  </div>
+  <Footer />
 </main>
 
 <style lang="scss">
-main {
+  main {
+    transition: opacity 750ms ease-in, transform 250ms ease-in;
+    opacity: 1;
     isolation: isolate;
     display: grid;
     grid-template-columns: 1fr min(65ch, 100%) 1fr;
-	grid-template-rows: max-content auto 1fr;
+    grid-template-rows: max-content auto 1fr;
     height: 100vh;
 
     > :global(*) {
-        grid-column: 2;
+      grid-column: 2;
     }
 
     > :global(.full-bleed) {
-        width: 100%;
-        grid-column: 1 / 4;
+      width: 100%;
+      grid-column: 1 / 4;
     }
-}
+  }
 
-.loading:before {
+  main.loading {
+      overflow: hidden;
+      transform: scale(0.9);
+      opacity: 0;
+  }
+
+  .loading:before {
     padding-top: 2.5rem;
     text-align: center;
-    content: 'Loading...';
-    margin:auto;
+    content: "Loading...";
+    margin: auto;
     text-shadow: 0 0 white;
     font-size: 5rem;
     z-index: 3;
     position: fixed;
     inset: 0;
-    background: rgba(0 0 0 / 0.95)
-}
+    background: rgba(0 0 0 / 0.95);
+  }
 
-.calculator {
+  .calculator {
     padding: 4px;
     border: 2px solid var(--cds-ui-04);
     box-shadow: 0 0 3px 0px var(--cds-ui-04);
@@ -228,16 +255,15 @@ main {
     gap: 2px 2px;
     grid-auto-flow: row;
     grid-template-areas:
-        "out out out out"
-        "ac pow division mult"
-        "n7 n8 n9 minus"
-        "n4 n5 n6 plus"
-        "n1 n2 n3 equal"
-        "n0 n0 ndot equal";
-}
+      "out out out out"
+      "ac pow division mult"
+      "n7 n8 n9 minus"
+      "n4 n5 n6 plus"
+      "n1 n2 n3 equal"
+      "n0 n0 ndot equal";
+  }
 
-:global(.cursor-text) {
-	cursor: text !important;
-}
-
+  :global(.cursor-text) {
+    cursor: text !important;
+  }
 </style>
