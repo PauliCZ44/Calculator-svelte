@@ -6,7 +6,6 @@ import {
 } from "carbon-components-svelte";
 import "carbon-components-svelte/css/all.css";
 
-
 import { onMount } from "svelte";
 import Footer from "./Footer.svelte";
 import Header from "./Header.svelte";
@@ -15,71 +14,142 @@ onMount(() => {
     document.getElementById("app").focus();
 });
 
-let operands = ["/","*","-","+","*","^",]
-let input = "0";
+let operation
+let history = []
+let historyString = ""
+let calcEl
+let operationEl
+let operands = ["/","x","-","+","*","^",]
+let input = 0;
+let lastRes
+
+let round = (num) => {
+    return Math.round((num + Number.EPSILON) * 100000000000000) / 100000000000000
+}
 
 let evaluate = () => {
-	console.log("eval")
+    while (input.includes('--')) {
+        input = input.replaceAll('--', '-')
+    }
+    let res = round(Function('return ' + operation)())
+    console.log("eval")
+    operation += `=${res}`
+    history.push( `${operation}`)
+    historyString = history.join("\n")
+    lastRes = res
+    return res
+}
+
+let handleAC = () => {
+    input = "0"
+    operation = ""
+}
+
+let handleFirstInput = () => {
+    if (/^0$/g.test(input)) {
+        console.log("zero only");
+        input = ''
+    }   
+}
+
+let removeLastChar = () => {
+    input = `${input}`.slice(0, -1)
+}
+
+let handleAddOperand = (operand) => {
+    if (operation.includes('=')) {
+        operation = lastRes + operand;
+    }
+    // console.log({operandIsLast})
+    // input = operandIsLast ? input.slice(0,-1) + operand : operand;
+    /* Check if in operation last char is operand. If true then replace operand. If false add operand */
+    let isOperandLast = operands.includes(operation.slice(-1))
+    operation = isOperandLast ? operation.slice(0,-1) + operand : operation+operand;
+    input = operand
+}
+
+
+let handleDot = (e) => {
+    console.log({input});
+    if (!`${input}`.includes('.')) {
+            console.log("dot is included");
+			input += "."
+            operation += e.target.innerText
+	}
+    if (operation.includes('=')) {
+        input = "0."
+        operation = "0."
+    }
 }
 
 let buttonClick = (e) => {
-    console.log({e});
-
+    console.log("inner text: ",e.target.innerText);
     if (e.target.localName == 'button') {
-		console.log(e.target);
         switch (e.target.innerText) {
             case "/":
-                input += " / ";
+                handleAddOperand("/")
                 break;
 			case "^":
-                input += " ^ ";
+            handleAddOperand("**")
                 break;
             case "AC":
-                input = "0";
+                handleAC()
                 break;
-            case "*":
-                input += " * ";
+            case '*':
+            case "x":
+            handleAddOperand("*")
                 break;
             case "-":
-                input += " - ";
+            handleAddOperand("-")
                 break;
             case "+":
-                input += " + ";
+            handleAddOperand("+")
                 break;
-            case "/":
-                input += " / ";
+			case "=":
+                input = evaluate()
+                break; 
+            case ".":
+                console.log(". event");
+                handleDot(e)	
                 break;
-				case "=":
-                evaluate()
-                break;	
             default:
-				input += e.target.innerText
+                handleFirstInput()
+                if (operation.includes('=')) {
+                    input = e.target.innerText
+                    operation = e.target.innerText
+                    break;
+                } else if (operands.includes(input[0])) {
+                    input = e.target.innerText
+                    operation += e.target.innerText
+                } else {
+                    input += e.target.innerText
+                    operation += e.target.innerText
+                }
                 break;
         }
+        
     }
 
 };
-
-let calcEl
 
 let onKeyPress = (e) => {
 	console.log("key event:", e);
     if (parseInt(e.key) >= 0) {
+        handleFirstInput()
         console.log("number", e.key);
         input += e.key;
     } else if (operands.includes(e.key)) {
-		input += " " + e.key + " ";
+		handleAddOperand(e.key)
 	} else if (e.key === "Enter") {
-
+        input = evaluate()
 	} else if (e.key === "," || e.key === ".") {
-		if (!input.includes(".")) {
-			input += "."
-		}
+        handleDot()
 	} else if (e.key === "Backspace" || e.key === "Delete") {
-		input = input.slice(0, -1)
-        return false;
+        handleFirstInput()
+        removeLastChar()
     }
 };
+
 </script>
 
 <main on:keydown={onKeyPress} tabindex="-1" id="app">
@@ -87,7 +157,8 @@ let onKeyPress = (e) => {
 		<div class="content">
 			<section class="calculator" on:click={buttonClick} bind:this={calcEl}>
 				<div class="out">
-					<TextInput bind:value={input}  id="display" />
+					<TextInput bind:value={operation} id="operation" readonly light  size="sm" />
+					<TextInput bind:value={input}  id="display" readonly   size="xl" />
 				</div>
 				<Button class="control ac" id="clear">AC</Button>
 				<Button class="control pow">^</Button>
@@ -108,7 +179,7 @@ let onKeyPress = (e) => {
 				<Button class="control ndot" id="decimal">.</Button>
 				<Button class="control equal" id="equals">=</Button>
 			</section>
-			<TextArea labelText="History of results" disabled class="cursor-text"/>
+			<TextArea labelText="History of results" disabled class="cursor-text" bind:value={historyString}/>
 		</div>
 	<Footer/>
 </main>
@@ -133,7 +204,7 @@ main {
 .calculator {
     padding: 4px;
     border: 2px solid var(--cds-ui-04);
-    box-shadow: 0 0 10px 0px var(--cds-ui-04);
+    box-shadow: 0 0 3px 0px var(--cds-ui-04);
     border-radius: 3px;
     margin: 2rem auto;
     max-width: 31rem;

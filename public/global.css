@@ -13,9 +13,26 @@
     transition: all 200ms ease;
 }
 
+/* OUTPUT ELEMENTS*/
+
 .out input {
+    font-family: 'Digital-7';
+    font-size: 2.25rem;
     text-align: end;
+    padding-right: 1rem !important;
 }
+
+.out .bx--text-input--sm {
+    color: grey;
+    border-bottom: none;
+    //height: ;
+   font-size: 1.5rem; 
+} 
+
+.out svg {
+    display: none;
+}
+
 
 button.bx--tooltip__trigger.bx--tooltip__trigger--definition {
     border-bottom: none;
@@ -27,11 +44,17 @@ button.bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom
 
 @media (max-width: 600px) {
     button.bx--btn {
-        padding: calc(0.875rem - 3px) 43px calc(0.875rem - 3px) 10px;
+        padding: calc(0.875rem - 3px) 23px calc(0.875rem - 3px) 15px;
        }
 }
 
+button.bx--btn {
+    font-family: 'Digital-7';
+    min-height: 5rem;
+    font-size: 2.5rem;
 
+    padding: calc(0.875rem - 3px) 33px calc(0.875rem - 3px) 15px;
+}
 
 /* GRID */
 .n7 { grid-area: n7; }
@@ -53,3 +76,60 @@ button.bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom
 .ac { grid-area: ac; }
 .pow { grid-area: pow; }
 .equal { grid-area: equal; }
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar, .scroller::-webkit-scrollbar {
+    width: 0.8rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background:  var(--primary2);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:  var(--primary3);
+}   
+/* FONTS */
+
+@font-face {
+    font-family: 'Digital-7';
+    src: url('fonts/Digital-7.woff2') format('woff2'),
+        url('fonts/Digital-7.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Digital-7 Mono';
+    src: url('fonts/Digital-7Mono.woff2') format('woff2'),
+        url('fonts/Digital-7Mono.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Digital-7 Mono';
+    src: url('fonts/Digital-7MonoItalic.woff2') format('woff2'),
+        url('fonts/Digital-7MonoItalic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Digital-7';
+    src: url('fonts/Digital-7Italic.woff2') format('woff2'),
+        url('fonts/Digital-7Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
