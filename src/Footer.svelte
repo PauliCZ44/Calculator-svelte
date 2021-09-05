@@ -1,6 +1,7 @@
 <footer class="full-bleed">
     <div class="footerContent p-3">
-        <p> Credits: https://codepen.io/RefractedColor/pen/mdWZRPQ </p>
+        <p> Credits for dark mode toggle button: https://codepen.io/RefractedColor/pen/mdWZRPQ </p>
+        
     </div>
 </footer>
 
@@ -10,8 +11,8 @@ footer {
 	align-self: end;
 }
 
-p{
-    font-size: 0.85rem;
+p {
+    font-size: 0.7rem;
     word-break: break-all;
 }
 
