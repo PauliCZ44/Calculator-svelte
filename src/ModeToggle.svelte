@@ -5,7 +5,6 @@
 
   onMount(() => {
     setTimeout(() => {
-      console.log(wrapper);
       wrapper.classList.add("loaded")
     }, 500)
 });

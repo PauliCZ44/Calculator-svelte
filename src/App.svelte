@@ -9,12 +9,14 @@ import "carbon-components-svelte/css/all.css";
 import { onMount } from "svelte";
 import Footer from "./Footer.svelte";
 import Header from "./Header.svelte";
+import PushableButton from "./PushableButton.svelte";
 
 onMount(() => {
-    document.getElementById("app").focus();
+   
     setTimeout(() => {
+        document.getElementById("app").focus();
         document.getElementById("app").classList.remove("loading")
-    }, 100)
+    }, 0)
 
 });
 
@@ -104,7 +106,8 @@ let handleDot = (e) => {
 
 let buttonClick = (e) => {
     //console.log("inner text: ",e.target.innerText);
-    if (e.target.localName == 'button') {
+    if (e.target.parentElement.nodeName == 'BUTTON') {
+        console.log("btn click");
         switch (e.target.innerText) {
             case "/":
                 handleAddOperand("/")
@@ -176,24 +179,25 @@ let onKeyPress = (e) => {
         />
         <TextInput bind:value={input} id="display" readonly size="xl" />
       </div>
-      <Button class="control ac" id="clear">AC</Button>
-      <Button class="control pow">^</Button>
-      <Button class="control division" id="divide">/</Button>
-      <Button class="control mult" id="multiply">*</Button>
-      <Button class="number n7" id="seven">7</Button>
-      <Button class="number n8" id="eight">8</Button>
-      <Button class="number n9" id="nine">9</Button>
-      <Button class="control minus" id="subtract">-</Button>
-      <Button class="number n4" id="four">6</Button>
-      <Button class="number n5" id="five">5</Button>
-      <Button class="number n6" id="six">4</Button>
-      <Button class="control plus" id="add">+</Button>
-      <Button class="number n1" id="one">1</Button>
-      <Button class="number n2" id="two">2</Button>
-      <Button class="number n3" id="three">3</Button>
-      <Button class="number n0" id="zero">0</Button>
-      <Button class="control ndot" id="decimal">.</Button>
-      <Button class="control equal" id="equals">=</Button>
+      <PushableButton Class="control ac" id="clear">AC</PushableButton>
+      <PushableButton Class="control pow">^</PushableButton>
+      <PushableButton Class="control division" id="divide">/</PushableButton>
+      <PushableButton Class="control mult" id="multiply">*</PushableButton>
+      <PushableButton Class="number n7" id="seven">7</PushableButton>
+      <PushableButton Class="number n8" id="eight">8</PushableButton>
+      <PushableButton Class="number n9" id="nine">9</PushableButton>
+      <PushableButton Class="control minus" id="subtract">-</PushableButton>
+      <PushableButton Class="number n4" id="four">6</PushableButton>
+      <PushableButton Class="number n5" id="five">5</PushableButton>
+      <PushableButton Class="number n6" id="six">4</PushableButton>
+      <PushableButton Class="control plus" id="add">+</PushableButton>
+      <PushableButton Class="number n1" id="one">1</PushableButton>
+      <PushableButton Class="number n2" id="two">2</PushableButton>
+      <PushableButton Class="number n3" id="three">3</PushableButton>
+      <PushableButton Class="number n0" id="zero">0</PushableButton>
+      <PushableButton Class="control ndot" id="decimal">.</PushableButton>
+      <PushableButton Class="control equal" id="equals">=</PushableButton>
+
     </section>
     <TextArea
       labelText="History of results"
@@ -207,6 +211,7 @@ let onKeyPress = (e) => {
 
 <style lang="scss">
   main {
+    transform: scale(0.95);
     transition: opacity 750ms ease-in, transform 250ms ease-in;
     opacity: 1;
     isolation: isolate;
@@ -223,12 +228,17 @@ let onKeyPress = (e) => {
       width: 100%;
       grid-column: 1 / 4;
     }
+
+    &:focus {
+        border: none;
+        outline: none;
+    }
   }
 
   main.loading {
-      overflow: hidden;
+      //overflow: hidden;
       transform: scale(0.9);
-      opacity: 0;
+    opacity: 0.5;
   }
 
   .loading:before {
@@ -236,18 +246,17 @@ let onKeyPress = (e) => {
     text-align: center;
     content: "Loading...";
     margin: auto;
-    text-shadow: 0 0 white;
     font-size: 5rem;
     z-index: 3;
     position: fixed;
     inset: 0;
-    background: rgba(0 0 0 / 0.95);
+    //background: rgba(0 0 0 / 0.95);
   }
 
   .calculator {
     padding: 4px;
     border: 2px solid var(--cds-ui-04);
-    box-shadow: 0 0 3px 0px var(--cds-ui-04);
+    box-shadow: 1px 1px 3px 0px var(--cds-ui-04);
     border-radius: 3px;
     margin: 2rem auto;
     max-width: 31rem;
