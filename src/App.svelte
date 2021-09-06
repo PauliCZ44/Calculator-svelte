@@ -35,7 +35,7 @@ let evaluate = () => {
         input = input.replaceAll('--', '-')
     }
     let res = round(Function('return ' + operation)())
-    console.log("eval")
+    //console.log("eval")
     operation += `=${res}`
     history.push( `${operation}`)
     historyString = history.join("\n")
@@ -50,7 +50,7 @@ let handleAC = () => {
 
 let handleFirstInput = () => {
     if (/^0$/g.test(input)) {
-        console.log("zero only");
+        //console.log("zero only");
         input = ''
     }   
 }
@@ -61,10 +61,6 @@ let removeLastChar = () => {
 
 let handleNumberInput = (e, keyEvent = false) => {
     let num = keyEvent ? e : e.target.innerText
-    console.log(e);
-    if (typeof e === "number") {
-        console.log("is num");
-    }
     if (operation.includes('=')) {
         input = num
         operation = num
@@ -78,19 +74,25 @@ let handleNumberInput = (e, keyEvent = false) => {
 }
 
 let handleAddOperand = (operand) => {
+    // After showing result we want to start new computation on the last result
+    let lastCharOfOperation = operation.slice(-1)
     if (operation.includes('=')) {
         operation = lastRes + operand;
     }
-    let isOperandLast = operands.includes(operation.slice(-1))
+    // Only for minus press: if last action is operand and it is not minus add minus as a operand. Rest of the function do the rest
+    if (operand === '-' && (operands.includes(lastCharOfOperation) && lastCharOfOperation !== '-')) {
+        operation += "-"
+    }
+    let isOperandLast = operands.includes(lastCharOfOperation)
     operation = isOperandLast ? operation.slice(0,-1) + operand : operation+operand;
     input = operand
 }
 
 
 let handleDot = (e) => {
-    console.log({input});
+    //console.log({input});
     if (!`${input}`.includes('.')) {
-            console.log("dot is included");
+            //console.log("dot is included");
 			input += "."
             operation += e.target.innerText
 	}
@@ -101,7 +103,7 @@ let handleDot = (e) => {
 }
 
 let buttonClick = (e) => {
-    console.log("inner text: ",e.target.innerText);
+    //console.log("inner text: ",e.target.innerText);
     if (e.target.localName == 'button') {
         switch (e.target.innerText) {
             case "/":
@@ -127,7 +129,7 @@ let buttonClick = (e) => {
                 input = evaluate()
                 break; 
             case ".":
-                console.log(". event");
+                //console.log(". event");
                 handleDot(e)	
                 break;
             default:
@@ -141,7 +143,7 @@ let buttonClick = (e) => {
 };
 
 let onKeyPress = (e) => {
-	console.log("key event:", e);
+	//console.log("key event:", e);
     if (parseInt(e.key) >= 0) {
         handleFirstInput()
         handleNumberInput(e.key, true)

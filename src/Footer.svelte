@@ -54,4 +54,8 @@
   .svelte-link {
     color: #ff3e00;
   }
+
+  .svelte-link:hover {
+    color: rgb(160, 50, 14);
+    }
 </style>
