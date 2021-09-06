@@ -211,7 +211,7 @@ let onKeyPress = (e) => {
     opacity: 1;
     isolation: isolate;
     display: grid;
-    grid-template-columns: 1fr min(65ch, 100%) 1fr;
+    grid-template-columns: 1fr min(58ch, 100%) 1fr;
     grid-template-rows: max-content auto 1fr;
     height: 100vh;
 
