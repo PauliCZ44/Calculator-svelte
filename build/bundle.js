@@ -11025,13 +11025,13 @@ var app = (function () {
     			create_component(footer.$$.fragment);
     			attr_dev(div0, "class", "out");
     			add_location(div0, file, 168, 6, 4406);
-    			attr_dev(section, "class", "calculator svelte-1wg8yjg");
+    			attr_dev(section, "class", "calculator svelte-nncyy8");
     			add_location(section, file, 167, 4, 4328);
     			attr_dev(div1, "class", "content");
     			add_location(div1, file, 166, 2, 4301);
     			attr_dev(main, "tabindex", "-1");
     			attr_dev(main, "id", "app");
-    			attr_dev(main, "class", "loading svelte-1wg8yjg");
+    			attr_dev(main, "class", "loading svelte-nncyy8");
     			add_location(main, file, 164, 0, 4214);
     		},
     		l: function claim(nodes) {
