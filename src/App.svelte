@@ -24,7 +24,7 @@ let operation
 let history = []
 let historyString = ""
 let calcEl
-let operands = ["/","x","-","+","*","^",]
+let operands = ["/","x","-","+","**","*","^",]
 let input = 0;
 let lastRes
 
@@ -84,6 +84,10 @@ let handleAddOperand = (operand) => {
     // Only for minus press: if last action is operand and it is not minus add minus as a operand. Rest of the function do the rest
     if (operand === '-' && (operands.includes(lastCharOfOperation) && lastCharOfOperation !== '-')) {
         operation += "-"
+    }
+    if (operation.slice(-2) === "**") {
+        console.log(operation.slice(-2));
+        operation = operation.slice(0,-1)
     }
     let isOperandLast = operands.includes(lastCharOfOperation)
     operation = isOperandLast ? operation.slice(0,-1) + operand : operation+operand;
@@ -211,7 +215,6 @@ let onKeyPress = (e) => {
 
 <style lang="scss">
   main {
-    transform: scale(0.95);
     transition: opacity 750ms ease-in, transform 250ms ease-in;
     opacity: 1;
     isolation: isolate;
