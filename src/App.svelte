@@ -1,172 +1,170 @@
 <script>
-import {
-    Button,
-    TextInput,
-    TextArea,
-} from "carbon-components-svelte";
-import "carbon-components-svelte/css/all.css";
+  import { Button, TextInput, TextArea } from "carbon-components-svelte";
+  import "carbon-components-svelte/css/all.css";
 
-import { onMount } from "svelte";
-import Footer from "./Footer.svelte";
-import Header from "./Header.svelte";
-import PushableButton from "./PushableButton.svelte";
+  import { onMount } from "svelte";
+  import Footer from "./Footer.svelte";
+  import Header from "./Header.svelte";
+  import PushableButton from "./PushableButton.svelte";
 
-onMount(() => {
-   
+  onMount(() => {
     setTimeout(() => {
-        document.getElementById("app").focus();
-        document.getElementById("app").classList.remove("loading")
-    }, 0)
+      document.getElementById("app").focus();
+      document.getElementById("app").classList.remove("loading");
+    }, 0);
+  });
 
-});
+  let operation;
+  let history = [];
+  let historyString = "";
+  let calcEl;
+  let operands = ["/", "x", "-", "+", "**", "*", "^"];
+  let input = 0;
+  let lastRes;
 
-let operation
-let history = []
-let historyString = ""
-let calcEl
-let operands = ["/","x","-","+","**","*","^",]
-let input = 0;
-let lastRes
+  let round = (num) => {
+    return (
+      Math.round((num + Number.EPSILON) * 100000000000000) / 100000000000000
+    );
+  };
 
-let round = (num) => {
-    return Math.round((num + Number.EPSILON) * 100000000000000) / 100000000000000
-}
-
-let evaluate = () => {
-    while (input.includes('--')) {
-        input = input.replaceAll('--', '-')
+  let evaluate = () => {
+    while (input.includes("--")) {
+      input = input.replaceAll("--", "-");
     }
-    let res = round(Function('return ' + operation)())
+    let res = round(Function("return " + operation)());
     //console.log("eval")
-    operation += `=${res}`
-    history.push( `${operation}`)
-    historyString = history.join("\n")
-    lastRes = res
-    return res
-}
+    operation += `=${res}`;
+    history.push(`${operation}`);
+    historyString = history.join("\n");
+    lastRes = res;
+    return res;
+  };
 
-let handleAC = () => {
-    input = "0"
-    operation = ""
-}
+  let handleAC = () => {
+    input = "0";
+    operation = "";
+  };
 
-let handleFirstInput = () => {
+  let handleFirstInput = () => {
     if (/^0$/g.test(input)) {
-        //console.log("zero only");
-        input = ''
-    }   
-}
-
-let removeLastChar = () => {
-    input = `${input}`.slice(0, -1)
-}
-
-let handleNumberInput = (e, keyEvent = false) => {
-    let num = keyEvent ? e : e.target.innerText
-    if (operation.includes('=')) {
-        input = num
-        operation = num
-    } else if (operands.includes(input[0])) {
-        input = num
-        operation += num
-    } else {
-        input += num
-        operation += num
+      //console.log("zero only");
+      input = "";
     }
-}
+  };
 
-let handleAddOperand = (operand) => {
+  let removeLastChar = () => {
+    input = `${input}`.slice(0, -1);
+  };
+
+  let handleNumberInput = (e, keyEvent = false) => {
+    let num = keyEvent ? e : e.target.innerText;
+    if (operation.includes("=")) {
+      input = num;
+      operation = num;
+    } else if (operands.includes(input[0])) {
+      input = num;
+      operation += num;
+    } else {
+      input += num;
+      operation += num;
+    }
+  };
+
+  let handleAddOperand = (operand) => {
     // After showing result we want to start new computation on the last result
-    let lastCharOfOperation = operation.slice(-1)
-    if (operation.includes('=')) {
-        operation = lastRes + operand;
+    let lastCharOfOperation = operation.slice(-1);
+    if (operation.includes("=")) {
+      operation = lastRes + operand;
     }
     // Only for minus press: if last action is operand and it is not minus add minus as a operand. Rest of the function do the rest
-    if (operand === '-' && (operands.includes(lastCharOfOperation) && lastCharOfOperation !== '-')) {
-        operation += "-"
+    if (
+      operand === "-" &&
+      operands.includes(lastCharOfOperation) &&
+      lastCharOfOperation !== "-"
+    ) {
+      operation += "-";
     }
     if (operation.slice(-2) === "**") {
-        console.log(operation.slice(-2));
-        operation = operation.slice(0,-1)
+      console.log(operation.slice(-2));
+      operation = operation.slice(0, -1);
     }
-    let isOperandLast = operands.includes(lastCharOfOperation)
-    operation = isOperandLast ? operation.slice(0,-1) + operand : operation+operand;
-    input = operand
-}
+    let isOperandLast = operands.includes(lastCharOfOperation);
+    operation = isOperandLast
+      ? operation.slice(0, -1) + operand
+      : operation + operand;
+    input = operand;
+  };
 
-
-let handleDot = (e) => {
+  let handleDot = (e) => {
     //console.log({input});
-    if (!`${input}`.includes('.')) {
-            //console.log("dot is included");
-			input += "."
-            operation += e.target.innerText
-	}
-    if (operation.includes('=')) {
-        input = "0."
-        operation = "0."
+    if (!`${input}`.includes(".")) {
+      //console.log("dot is included");
+      input += ".";
+      operation += e.target.innerText;
     }
-}
+    if (operation.includes("=")) {
+      input = "0.";
+      operation = "0.";
+    }
+  };
 
-let buttonClick = (e) => {
+  let buttonClick = (e) => {
     //console.log("inner text: ",e.target.innerText);
-    if (e.target.parentElement.nodeName == 'BUTTON') {
-        console.log("btn click");
-        switch (e.target.innerText) {
-            case "/":
-                handleAddOperand("/")
-                break;
-			case "^":
-            handleAddOperand("**")
-                break;
-            case "AC":
-                handleAC()
-                break;
-            case '*':
-            case "x":
-            handleAddOperand("*")
-                break;
-            case "-":
-            handleAddOperand("-")
-                break;
-            case "+":
-            handleAddOperand("+")
-                break;
-			case "=":
-                input = evaluate()
-                break; 
-            case ".":
-                //console.log(". event");
-                handleDot(e)	
-                break;
-            default:
-                handleFirstInput()
-                handleNumberInput(e)
-                break;
-        }
-        
+    if (e.target.parentElement.nodeName == "BUTTON") {
+      console.log("btn click");
+      switch (e.target.innerText) {
+        case "/":
+          handleAddOperand("/");
+          break;
+        case "^":
+          handleAddOperand("**");
+          break;
+        case "AC":
+          handleAC();
+          break;
+        case "*":
+        case "x":
+          handleAddOperand("*");
+          break;
+        case "-":
+          handleAddOperand("-");
+          break;
+        case "+":
+          handleAddOperand("+");
+          break;
+        case "=":
+          input = evaluate();
+          break;
+        case ".":
+          //console.log(". event");
+          handleDot(e);
+          break;
+        default:
+          handleFirstInput();
+          handleNumberInput(e);
+          break;
+      }
     }
+  };
 
-};
-
-let onKeyPress = (e) => {
-	//console.log("key event:", e);
+  let onKeyPress = (e) => {
+    //console.log("key event:", e);
     if (parseInt(e.key) >= 0) {
-        handleFirstInput()
-        handleNumberInput(e.key, true)
+      handleFirstInput();
+      handleNumberInput(e.key, true);
     } else if (operands.includes(e.key)) {
-		handleAddOperand(e.key)
-	} else if (e.key === "Enter") {
-        e.preventDefault()
-        input = evaluate()
-	} else if (e.key === "," || e.key === ".") {
-        handleDot()
-	} else if (e.key === "Backspace" || e.key === "Delete") {
-        handleFirstInput()
-        removeLastChar()
+      handleAddOperand(e.key);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      input = evaluate();
+    } else if (e.key === "," || e.key === ".") {
+      handleDot();
+    } else if (e.key === "Backspace" || e.key === "Delete") {
+      handleFirstInput();
+      removeLastChar();
     }
-};
-
+  };
 </script>
 
 <main on:keydown={onKeyPress} tabindex="-1" id="app" class="loading">
@@ -201,7 +199,6 @@ let onKeyPress = (e) => {
       <PushableButton Class="number n0" id="zero">0</PushableButton>
       <PushableButton Class="control ndot" id="decimal">.</PushableButton>
       <PushableButton Class="control equal" id="equals">=</PushableButton>
-
     </section>
     <TextArea
       labelText="History of results"
@@ -215,7 +212,9 @@ let onKeyPress = (e) => {
 
 <style lang="scss">
   main {
-    transition: opacity 750ms ease-in, transform 250ms ease-in;
+    transition:
+      opacity 750ms ease-in,
+      transform 250ms ease-in;
     opacity: 1;
     isolation: isolate;
     display: grid;
@@ -233,14 +232,14 @@ let onKeyPress = (e) => {
     }
 
     &:focus {
-        border: none;
-        outline: none;
+      border: none;
+      outline: none;
     }
   }
 
   main.loading {
-      //overflow: hidden;
-      transform: scale(0.9);
+    //overflow: hidden;
+    transform: scale(0.9);
     opacity: 0.5;
   }
 
