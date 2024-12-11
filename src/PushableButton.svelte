@@ -79,14 +79,14 @@
     transform: translate(0px, -4px);
     transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }
-  .pushable:hover {
+  .pushable:hover, .pushable.is-active {
     filter: brightness(120%);
   }
   .pushable:hover .front {
     transform: translate(0px, -5px);
     transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
   }
-  .pushable:active .front {
+  .pushable:active .front, .pushable.is-active .front {
     transform: translate(0px, -2px);
     transition: transform 34ms;
   }
@@ -94,7 +94,7 @@
     transform: translateY(4px);
     transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
   }
-  .pushable:active .shadow {
+  .pushable:active .shadow, .pushable.is-active .shadow{
     transform: translateY(1px);
     transition: transform 34ms;
   }

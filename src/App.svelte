@@ -74,6 +74,7 @@
   let handleAddOperand = (operand) => {
     // After showing result we want to start new computation on the last result
     let lastCharOfOperation = operation.slice(-1);
+    
     if (operation.includes("=")) {
       operation = lastRes + operand;
     }
@@ -148,11 +149,21 @@
     }
   };
 
+  function addActiveToButton(number) {
+    const targetButton = document.querySelector(`.n${number} button`);
+      if (targetButton) {
+        targetButton.classList.add("is-active");
+        setTimeout(() => {
+          targetButton.classList.remove("is-active");
+        }, 150)
+      } 
+  }
+
   let onKeyPress = (e) => {
-    //console.log("key event:", e);
     if (parseInt(e.key) >= 0) {
       handleFirstInput();
       handleNumberInput(e.key, true);
+      addActiveToButton(e.key)
     } else if (operands.includes(e.key)) {
       handleAddOperand(e.key);
     } else if (e.key === "Enter") {
@@ -182,16 +193,16 @@
         <TextInput bind:value={input} id="display" readonly size="xl" />
       </div>
       <PushableButton Class="control ac" id="clear">AC</PushableButton>
-      <PushableButton Class="control pow">^</PushableButton>
+      <PushableButton Class="control pow" id="power">^</PushableButton>
       <PushableButton Class="control division" id="divide">/</PushableButton>
       <PushableButton Class="control mult" id="multiply">*</PushableButton>
       <PushableButton Class="number n7" id="seven">7</PushableButton>
       <PushableButton Class="number n8" id="eight">8</PushableButton>
       <PushableButton Class="number n9" id="nine">9</PushableButton>
       <PushableButton Class="control minus" id="subtract">-</PushableButton>
-      <PushableButton Class="number n4" id="four">6</PushableButton>
+      <PushableButton Class="number n6" id="six">6</PushableButton>
       <PushableButton Class="number n5" id="five">5</PushableButton>
-      <PushableButton Class="number n6" id="six">4</PushableButton>
+      <PushableButton Class="number n4" id="four">4</PushableButton>
       <PushableButton Class="control plus" id="add">+</PushableButton>
       <PushableButton Class="number n1" id="one">1</PushableButton>
       <PushableButton Class="number n2" id="two">2</PushableButton>
